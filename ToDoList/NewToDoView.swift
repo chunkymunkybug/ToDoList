@@ -8,32 +8,42 @@
 import SwiftUI
 
 struct NewToDoView: View {
+    @Bindable var toDoItem: ToDoItem
+    @Environment(\.modelContext) var modelContext
     var body: some View {
+        
         VStack {
             Text ("Task title:")
                 .font(.title)
                 .fontWeight(.bold)
-            TextField("Enter the task description...", text: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Value@*/.constant("")/*@END_MENU_TOKEN@*/)
+            TextField("Enter the task description...", text: $toDoItem.title)
                 .padding()
                 .background(Color (.systemGroupedBackground))
                 .cornerRadius (15)
 //                .padding()
     
-            Toggle(isOn: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Is On@*/.constant(true)/*@END_MENU_TOKEN@*/) {
+            Toggle(isOn: $toDoItem.isImportant) {
                 Text ("Is it important?")
             } //end of toggle
             Button {
-                /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/ /*@END_MENU_TOKEN@*/
+                addToDo()
+                showNewTask = false
             } label: {
                 Text ("Save")
             } //end of button label
         }//end of VStack
         .padding ()
-    }
+        
+        func addToDo (){
+            let toDo = ToDoItem (title: toDoItem.title, isImportant:toDoItem.isImportant)
+            modelContext.insert (toDo)
+        
+        }//end of func
+    }//end of body
 }
 
 
 
 #Preview {
-    NewToDoView()
+    NewToDoView(showNewTask: .constant(false), ToDoItem: ToDoItem: "", isImportant: false)
 }

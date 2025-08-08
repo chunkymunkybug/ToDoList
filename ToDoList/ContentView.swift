@@ -35,14 +35,21 @@ struct ContentView: View {
             
             List {
                 ForEach(toDos){ toDoItem in
-                    Text (toDoItem.title)
-                }
+                    if toDoItem.isImportant {
+                        Text ("‼️" + toDoItem.title)
+                    } else {
+                        Text (toDoItem.title)
+                    } //end of else
+                }//end of loop
             }//end of list
             
-            if showNewTask {
-                NewToDoView ()
+//            if showNewTask {
+//                NewToDoView (showNewTask: $showNewTask, toDoItem: ToDoItem(title: "", isImportant: false))
             }//end of if
+        .listStyle(.plain)
         }//end of VStack
+    if showNewTask {
+        NewToDoView (showNewTask: $showNewTask, toDoItem: ToDoItem(title: "", isImportant: false))
         .padding()
         
     }
@@ -50,4 +57,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .modelContainer(for:ToDoItem.self, inMemory:true)
 }
